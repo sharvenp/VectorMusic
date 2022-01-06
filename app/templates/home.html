@@ -1,0 +1,21 @@
+<div class="container h-100">
+    <div class="row align-items-center h-75">
+        <div class="col">
+            <div class="text-center">
+                <svg viewBox="0 0 960 300">
+                    <symbol id="s-text">
+                      <text text-anchor="middle" x="50%" y="80%">Vector Music</text>
+                    </symbol>
+                    <g class = "g-ants">
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                      <use xlink:href="#s-text" class="text-copy"></use>
+                    </g>
+                  </svg>
+                  <button type="button" onclick="window.location.href='{{ url_for( 'musiclist' ) }}';" class="beat button mt-5">Enter</button>
+            </div>
+        </div>
+    </div>
+</div>
