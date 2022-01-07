@@ -1,27 +1,45 @@
 <div class="px-4 py-5 text-center">
     <div class="mx-auto">
         <div class="container">
-            {% for chunk in song_chunks %}
-                <div class="row row-cols-1 row-cols-lg-4 g-5 mt-2">
-                    {% for song in chunk %}
-                    <div class="col">
-                        <div class="songcard popout overflow-hidden text-white bg-dark shadow-lg d-flex aligns-items-center" 
-                             style="background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url({{song['img']}}) no-repeat center; background-size: 22rem;"
-                             onclick="window.location.href='{{ url_for('music', id=song['id']) }}';">
-                            <div class="container p-3">
-                                <div class="row h-75 align-items-center">
-                                    <div class="col-md-12">
-                                        <h2 class="mt-5 title noselect">{{song['title']}}</h2>
-                                        <div class="mt-3 artist noselect ">{{song['artist']}}</div>
-                                        <div class="album noselect">{{song['album']}}</div>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group justify-content-center">
+                        <input type="text" class="search w-50" placeholder="..."> 
+                        <button class="button" type="button">Search</button>
+                      </div>
+                </div>
+            </div>
+            {% if song_rows is defined and song_rows|length > 0 %}
+                {% for row in song_rows %}
+                    <div class="row row-cols-1 row-cols-lg-4 g-5 mt-2">
+                        {% for song in row %}
+                        <div class="col">
+                            <div class="songcard popout overflow-hidden text-white bg-dark shadow-lg d-flex aligns-items-center" 
+                                style="background: linear-gradient(0deg, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url({{song['img']}}) no-repeat center; background-size: 22rem;"
+                                onclick="window.location.href='{{ url_for('music', id=song['id']) }}';">
+                                <div class="container p-3">
+                                    <div class="row h-75 align-items-center">
+                                        <div class="col-md-12">
+                                            <h2 class="mt-5 title noselect">{{song['title']}}</h2>
+                                            <div class="mt-3 artist noselect ">{{song['artist']}}</div>
+                                            <div class="album noselect">{{song['album']}}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        {% endfor %}
                     </div>
-                    {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div class="container mt-5">
+                    <div class="row align-items-center mt-5">
+                        <div class="jumbotron text-white display-2 text-center">
+                            <div class="header noselect">No results</div>
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
+            {% endif %}
         </div>
     </div>
   </div>

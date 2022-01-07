@@ -9,11 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SONG_DIR = os.getenv('MUSIC_DIR') 
-ID_SIZE = int(os.getenv('ID_SIZE'))
 
 def _generate_id():
     # generate random alphanumeric string
-    return ''.join(random.choice(string.ascii_lowercase  + string.digits) for _ in range(ID_SIZE))
+    return ''.join(random.choice(string.ascii_lowercase  + string.digits) for _ in range(12))
 
 def load_songs():
     print("Loading all music...")
@@ -37,6 +36,8 @@ def load_songs():
 
         track_metadata = {
             "id": track_id,
+            "dir": f'{SONG_DIR}/{music}',
+            "filename": music,
             "title": audio_metadata.tag.title,
             "artist": audio_metadata.tag.artist,
             "album": audio_metadata.tag.album,
