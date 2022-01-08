@@ -3,3 +3,4 @@ python-dotenv==0.19.2
 Flask==2.0.2
 eyed3==0.9.6
 pyOpenSSL==21.0.0
+gunicorn==20.1.0
