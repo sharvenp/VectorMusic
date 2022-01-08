@@ -5,10 +5,18 @@
                 <div class="row">
                     <div class="col text-center">
                         <img class="albumart mt-5" src="{{song['img']}}">
-                        <h2 class="mt-5 title noselect">{{song['title']}}</h2>
+                        <h2 class="mt-4 title noselect">{{song['title']}}</h2>
                         <div class="mt-3 artist noselect ">{{song['artist']}}</div>
                         <div class="album noselect">{{song['album']}}</div>
-                        <button onclick="window.location.href='{{ url_for('download', id=song['id']) }}';" type="button" class="beat button m-5">Download</button>
+                        <audio
+                            class="mt-4 player"
+                            controls
+                            src="{{ url_for('download', id=song['id']) }}">
+                                Your browser does not support the
+                                <code>audio</code> element.
+                        </audio>
+                        <br/>
+                        <button onclick="window.location.href='{{ url_for('download', id=song['id']) }}';" type="button" class="beat button mb-5 mt-2">Download</button>
                     </div>
                 </div>
             </div>
