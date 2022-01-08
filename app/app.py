@@ -11,7 +11,7 @@ load_dotenv()
 
 SONG_DIR = os.getenv('MUSIC_DIR') 
 
-music = load_songs()
+tracks = load_songs()
 app = Flask(__name__) 
 limiter = Limiter(app, key_func=get_remote_address)
 
@@ -30,7 +30,7 @@ def musiclist():
     if row_count is not None:
         row_count = max(int(row_count), 0)
     else:
-        row_count = len(music)
+        row_count = len(tracks)
         is_last_row = True
 
     if start_idx is not None:
@@ -41,7 +41,7 @@ def musiclist():
     if query is None:
         query = ""
 
-    queried_music = query_music(list(music.values()), query.lower())
+    queried_music = query_music(list(tracks.values()), query.lower())
     rows = _.chunk(queried_music, 4)
 
     is_last_row = (start_idx + row_count) >= len(rows)
@@ -52,15 +52,15 @@ def musiclist():
 
 @app.route("/music/<id>") 
 def music(id): 
-    if (id not in music):
+    if (id not in tracks):
         return render_template('index.html', body=render_template('notfound.html'))
-    return render_template('index.html', body=render_template("song.html", song=music[id]))
+    return render_template('index.html', body=render_template("song.html", song=tracks[id]))
 
 
 @app.route('/music/<id>/download')
 @limiter.limit("5/minute")
 def download(id):
-    return send_from_directory(SONG_DIR, music[id]['filename'], as_attachment=True)
+    return send_from_directory(SONG_DIR, tracks[id]['filename'], as_attachment=True)
 
 @app.errorhandler(429)
 def ratelimit_handler(e):
