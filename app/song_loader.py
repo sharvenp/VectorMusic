@@ -38,11 +38,11 @@ def load_songs():
             "id": track_id,
             "dir": f'{SONG_DIR}/{music}',
             "filename": music,
-            "title": audio_metadata.tag.title,
-            "artist": audio_metadata.tag.artist,
-            "album": audio_metadata.tag.album,
-            "publisher": audio_metadata.tag.publisher,
-            "genre": None if audio_metadata.tag.genre is None else audio_metadata.tag.genre.name,
+            "title": audio_metadata.tag.title or '',
+            "artist": audio_metadata.tag.artist or '',
+            "album": audio_metadata.tag.album or '',
+            "publisher": audio_metadata.tag.publisher or '',
+            "genre": '' if audio_metadata.tag.genre is None else audio_metadata.tag.genre.name,
             "img": encoded_img
         }
 
@@ -50,3 +50,17 @@ def load_songs():
         
     print(f"Loaded {len(processed_music)} tracks.")
     return processed_music
+
+def query_music(songs, query):
+    filtered = []
+    for song in songs:
+        val = (query in song['title'].lower() or
+            query in song['artist'].lower()  or
+            query in song['album'].lower()  or
+            query in song['publisher'].lower()  or 
+            query in song['genre'].lower() )
+
+        if val:
+            filtered.append(song)
+    
+    return filtered

@@ -1,6 +1,6 @@
 
 from flask import Flask, render_template, send_from_directory, request
-from song_loader import load_songs
+from song_loader import load_songs, query_music
 import underscore as _
 import os
 from dotenv import load_dotenv
@@ -19,24 +19,36 @@ limiter = Limiter(app, key_func=get_remote_address)
 def index(): 
     return render_template('index.html', body=render_template("home.html"))
 
-@app.route("/music") 
-def musiclist(): 
+@app.route("/music", methods = ['GET']) 
+def musiclist():
+
+    query = request.args.get('q')
     start_idx = request.args.get('start')
     row_count = request.args.get('rows')
-    rows = _.chunk(list(music.values()), 4)
+   
+    is_last_row = False
     if row_count is not None:
-        row_count = int(row_count)
+        row_count = max(int(row_count), 0)
     else:
         row_count = len(music)
+        is_last_row = True
 
     if start_idx is not None:
-        start_idx = int(start_idx) 
+        start_idx = max(int(start_idx), 0) 
     else:
         start_idx = 0
 
-    print(len(rows), len(music), start_idx, row_count)
+    if query is None:
+        query = ""
+
+    queried_music = query_music(list(music.values()), query.lower())
+    rows = _.chunk(queried_music, 4)
+
+    is_last_row = (start_idx + row_count) >= len(rows)
+    is_first_row = start_idx == 0 
     rows = rows[start_idx:(start_idx + row_count)]
-    return render_template('index.html', body=render_template("songlist.html", song_rows=rows))
+
+    return render_template('index.html', body=render_template("songlist.html", previous_rows=max(0,start_idx - row_count), first_row=is_first_row, next_rows=(start_idx + row_count), last_row=is_last_row, row_count=row_count, song_rows=rows, query=query))
 
 @app.route("/music/<id>") 
 def music(id): 

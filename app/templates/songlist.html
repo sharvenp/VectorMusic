@@ -3,9 +3,18 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <div class="input-group justify-content-center">
-                        <input type="text" class="search w-50" placeholder="..."> 
-                        <button class="button" type="button">Search</button>
+                    <div class="justify-content-center mt-5">
+                        <form action="{{url_for('musiclist')}}" method="GET" class="align-middle">
+                            <!-- default pagination controls -->
+                            <input type="hidden" name="start" value="0">
+                            <input type="hidden" name="rows" value="20">
+                            <input type="text" name="q" class="search w-50" placeholder="..." value="{{query}}">
+                            <button class="button align-middle ms-2" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="white" class="searchicon" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                </svg>    
+                            </button>
+                        </form>
                       </div>
                 </div>
             </div>
@@ -31,11 +40,31 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
+                {% if row_count > 0 %}
+                    <div class="row">
+                        <div class="col">
+                            <div class="justify-content-center mt-5">
+                                {% if first_row == false %}
+                                    <button class="button align-middle ms-2" type="submit"
+                                        onclick="window.location.href='{{ url_for( 'musiclist' ) }}?start={{previous_rows}}&rows={{row_count}}&q={{query}}';">
+                                        Back
+                                    </button>
+                                {% endif %}
+                                {% if last_row == false %}
+                                    <button class="button align-middle ms-2" type="submit"
+                                        onclick="window.location.href='{{ url_for( 'musiclist' ) }}?start={{next_rows}}&rows={{row_count}}&q={{query}}';">
+                                        Next
+                                    </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             {% else %}
                 <div class="container mt-5">
                     <div class="row align-items-center mt-5">
                         <div class="jumbotron text-white display-2 text-center">
-                            <div class="header noselect">No results</div>
+                            <div class="header noselect mt-5"><i>Nothing to show</i></div>
                         </div>
                     </div>
                 </div>
