@@ -11,7 +11,7 @@ load_dotenv()
 
 SONG_DIR = os.getenv('MUSIC_DIR') 
 
-music = {}
+music = load_songs()
 app = Flask(__name__) 
 limiter = Limiter(app, key_func=get_remote_address)
 
@@ -67,6 +67,4 @@ def ratelimit_handler(e):
     return render_template('index.html', body=render_template('toomanyrequests.html'))
 
 if __name__ == '__main__':
-    # load all songs
-    music = load_songs()
     app.run(debug=True, host="0.0.0.0")
