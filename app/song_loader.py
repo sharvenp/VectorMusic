@@ -14,9 +14,14 @@ def _generate_id():
     # generate random alphanumeric string
     return ''.join(random.choice(string.ascii_lowercase  + string.digits) for _ in range(12))
 
+def _get_files_sorted_by_creation_date(directory):
+    all_music = os.listdir(directory);
+    all_music.sort(key=os.path.getmtime)
+    return all_music
+
 def load_songs():
     print("Loading all music...")
-    all_music = os.listdir(SONG_DIR);
+    all_music = _get_files_sorted_by_creation_date(SONG_DIR);
     processed_music = {}
     for music in all_music:
         # load metadata
