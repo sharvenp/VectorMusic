@@ -75,6 +75,6 @@ def query_music(songs, query):
         if val:
             filtered.append(song)
     
-    filtered.sort(key=lambda song: song[idx])
+    filtered.sort(key=lambda song: song['idx'])
 
     return filtered
