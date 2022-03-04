@@ -15,7 +15,10 @@ def _generate_id():
     return ''.join(random.choice(string.ascii_lowercase  + string.digits) for _ in range(12))
 
 def _get_files_sorted_by_creation_date(directory):
-    all_music = os.listdir(directory);
+    file_names = os.listdir(directory);
+    all_music = []
+    for fn in file_names:
+        all_music.append(f'{directory}/{fn}')
     all_music.sort(key=os.path.getmtime)
     return all_music
 
@@ -25,7 +28,7 @@ def load_songs():
     processed_music = {}
     for music in all_music:
         # load metadata
-        audio_metadata = eyed3.load(f'{SONG_DIR}/{music}')
+        audio_metadata = eyed3.load(music)
 
         # encode album art into base64
         encoded_img = ''
@@ -41,7 +44,7 @@ def load_songs():
 
         track_metadata = {
             "id": track_id,
-            "dir": f'{SONG_DIR}/{music}',
+            "dir": music,
             "filename": music,
             "title": audio_metadata.tag.title or '',
             "artist": audio_metadata.tag.artist or '',
