@@ -58,7 +58,7 @@ def music(id):
 
 
 @app.route('/music/<id>/download')
-@limiter.limit("5/minute")
+@limiter.limit("6/minute")
 def download(id):
     return send_from_directory(SONG_DIR, tracks[id]['filename'], as_attachment=True)
 

@@ -18,17 +18,20 @@ def _get_files_sorted_by_creation_date(directory):
     file_names = os.listdir(directory);
     all_music = []
     for fn in file_names:
-        all_music.append(f'{directory}/{fn}')
-    all_music.sort(key=os.path.getmtime)
+        all_music.append((f'{directory}/{fn}', fn))
+    all_music.sort(key=lambda pair: os.path.getmtime(pair[0]))
     return all_music
 
 def load_songs():
     print("Loading all music...")
     all_music = _get_files_sorted_by_creation_date(SONG_DIR);
     processed_music = {}
-    for music in all_music:
+    for i in range(len(all_music)):
+
+        full_path, name = all_music[i]
+
         # load metadata
-        audio_metadata = eyed3.load(music)
+        audio_metadata = eyed3.load(full_path)
 
         # encode album art into base64
         encoded_img = ''
@@ -44,8 +47,9 @@ def load_songs():
 
         track_metadata = {
             "id": track_id,
-            "dir": music,
-            "filename": music,
+            "idx": idx,
+            "dir": full_path,
+            "filename": name,
             "title": audio_metadata.tag.title or '',
             "artist": audio_metadata.tag.artist or '',
             "album": audio_metadata.tag.album or '',
@@ -71,4 +75,6 @@ def query_music(songs, query):
         if val:
             filtered.append(song)
     
+    filtered.sort(key=lambda song: song[idx])
+
     return filtered
