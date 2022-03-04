@@ -20,6 +20,7 @@ def _get_files_sorted_by_creation_date(directory):
     for fn in file_names:
         all_music.append((f'{directory}/{fn}', fn))
     all_music.sort(key=lambda pair: os.path.getmtime(pair[0]))
+    all_music.reverse()
     return all_music
 
 def load_songs():
