@@ -47,7 +47,7 @@ def load_songs():
 
         track_metadata = {
             "id": track_id,
-            "idx": idx,
+            "idx": i,
             "dir": full_path,
             "filename": name,
             "title": audio_metadata.tag.title or '',
