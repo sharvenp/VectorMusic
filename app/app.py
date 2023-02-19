@@ -57,8 +57,8 @@ def music(id):
     return render_template('index.html', body=render_template("song.html", song=tracks[id]))
 
 
+# @limiter.limit("6/minute")
 @app.route('/music/<id>/download')
-@limiter.limit("6/minute")
 def download(id):
     return send_from_directory(SONG_DIR, tracks[id]['filename'], as_attachment=True)
 
