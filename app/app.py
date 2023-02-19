@@ -4,21 +4,21 @@ from song_loader import load_songs, query_music
 import underscore as _
 import os
 from dotenv import load_dotenv
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
+# from flask_limiter import Limiter
+# from flask_limiter.util import get_remote_address
 import time
 import threading
 
 load_dotenv()
 
 SONG_DIR = os.getenv('MUSIC_DIR')
-TRACK_REFRESH_RATE = 15  # seconds
+TRACK_REFRESH_RATE = 20  # seconds
 
-tracks = load_songs()
+tracks = {}
 app = Flask(__name__)
-limiter = Limiter(app, key_func=get_remote_address)
+# limiter = Limiter(app, key_func=get_remote_address)
 
-
+# Set up track refreshing thread
 def refresh_tracks():
     while 1:
         time.sleep(TRACK_REFRESH_RATE)
@@ -26,7 +26,13 @@ def refresh_tracks():
         new_tracks = load_songs()
         tracks.clear()
         tracks.update(new_tracks)
+tracks.update(load_songs())
+thread = threading.Thread(
+    name='vector_music_refresh_tracks', target=refresh_tracks)
+thread.setDaemon(True)
+thread.start()
 
+# Flask code
 
 @app.route("/")
 def index():
@@ -84,8 +90,4 @@ def ratelimit_handler(e):
 
 
 if __name__ == '__main__':
-    thread = threading.Thread(
-        name='vector_music_refresh_tracks', target=refresh_tracks)
-    thread.setDaemon(True)
-    thread.start()
-    app.run(debug=True, host="0.0.0.0", port=9000)
+    app.run(debug=False, host="0.0.0.0", port=9000)
