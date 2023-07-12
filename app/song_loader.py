@@ -5,16 +5,19 @@ import base64
 import string
 import random
 from dotenv import load_dotenv
+import hashlib
 
 load_dotenv()
 
 SONG_DIR = os.getenv('MUSIC_DIR')
 
 
-def _generate_id():
+def _generate_id(full_path):
     # generate random alphanumeric string
-    return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(12))
+    # return ''.join(random.choice(string.ascii_lowercase + string.digits) for _ in range(12))
 
+    # hash full_path to get id
+    return str(hashlib.sha256(b'Hello World').hexdigest())
 
 def _get_files_sorted_by_creation_date(directory):
     file_names = os.listdir(directory)
@@ -49,10 +52,10 @@ def load_songs():
         else:
             print(f"Error: Failed to parse album art for {full_path}-{name}")
 
-        track_id = _generate_id()
+        track_id = _generate_id(full_path)
         while track_id in processed_music:
             # no duplicate ids
-            track_id = _generate_id()
+            track_id = _generate_id(full_path)
 
         track_metadata = {
             "id": track_id,
